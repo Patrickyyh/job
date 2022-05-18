@@ -1,5 +1,28 @@
 {
   "dependencies": {
+    "express": "^4.18.1",
     "react-router-dom": "^6.3.0"
+  },
+  "name": "jobhere",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Patrickyyh/job.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Patrickyyh/job/issues"
+  },
+  "homepage": "https://github.com/Patrickyyh/job#readme",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }

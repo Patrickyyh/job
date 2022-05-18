@@ -1365,6 +1365,8 @@ app.listen(port, () => console.log(`Server is listening on port ${port}...`))
 
 #### Error Middleware
 
+##### The difference between the this middleware and the previous one is this middleware only handle the error existing inside the router in the server. 
+
 - in the middleware create error-handler.js
 - setup function
 - accept 4 parameters, first one error
