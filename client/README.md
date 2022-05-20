@@ -1384,6 +1384,7 @@ app.listen(port, () => console.log(`Server is listening on port ${port}...`))
 ```sh
 npm install dotenv
 ```
+Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env. Storing configuration
 
 - import dotenv from 'dotenv'
 - dotenv.config()
@@ -1428,6 +1429,8 @@ export { register, login, updateUser }
 - authRoutes.js
 - setup express router
 - import functions from authController.js
+
+ <p> The reason to Use PATCH request: PATCH is a method of modifying resources where the client sends partial data that is to be updated without modifying the entire data.<p>
 
 ```js
 router.route('/register').post(register)
@@ -1516,12 +1519,16 @@ npm install validator
 - if error 500 with json({msg:'there was an error'})
 
 #### Pass Error to Error Handler
+Take look of the express handler page
+ - http://expressjs.com/en/guide/error-handling.html#error-handling
 
 - next(error)
 
 #### Express-Async-Errors Package
 
 - remove try/catch
+- Then we don't have to implement the try and catch 
+in every controller
 - [Express-Async-Errors](https://www.npmjs.com/package/express-async-errors)
 
 ```sh
@@ -1552,7 +1559,45 @@ npm install http-status-codes
 - setup defaultError
 
 #### Custom Errors
+##### Missing field Errors 
 
+1. Change 500 to 400 (bad request) and verify that name is validatorError. 
+2. iterated over all the propertie inside the error array and grab the message
+
+Here is the way how we can configure our code over here 
+```js
+  const defaultError = {
+        StatusCodes: StatusCodes.INTERNAL_SERVER_ERROR,
+        msg: 'Something went wrong , try again later.',
+    }
+
+    if(err.name === 'ValidationError'){
+        defaultError.StatusCodes = StatusCodes.BAD_REQUEST;
+        //defaultError.msg = err.message
+        defaultError.msg = Object.values(err.errors).map((item) => item.message).join(',')
+        
+    }
+
+    res.status(defaultError.StatusCodes).json({msg: defaultError.msg});
+```
+##### Unique Field Errors 
+1. Check if eff code existed and the value of the err.code by err.code && err.code
+2. Then use the Object keys to extract which field is missing over here. 
+
+
+##### Check for empty values in the controllers. 
+1. We want to configure the code in th error-handler. 
+In this way, we can provide whatever error message we want
+So this is a more genric error. 
+```js
+class CustomAPIError extends Error{
+    constructor(message){
+        super(message);
+        this.StatusCodes = StatusCodes.BAD_REQUEST;    
+    }
+    
+}
+```
 #### Refactor Errors
 
 - create errors folder
@@ -1563,6 +1608,12 @@ npm install http-status-codes
 - gotcha "errors/index.js"
 
 #### Hash Passwords
+- This part is very import , because we want to hash passwords before it is updated
+on the moogoDB. 
+- we hash the passwod and saved it into the database.
+- When user tried to log in, we basically compare the hash value
+- Check the middleware website for mongo below 
+- Make use of the pre middleware : 
 
 - one way street, only compare hashed values
 - [bcrypt.js](https://www.npmjs.com/package/bcryptjs)
@@ -1584,6 +1635,10 @@ npm install bcryptjs
 #### Mongoose - Custom Instance Methods
 
 [Custom Instance Methods](https://mongoosejs.com/docs/guide.html#methods)
+- Documents have many of their own built-in instance methods
+- we could define our own custom document instance methods 
+
+
 
 - UserSchema.methods.createJWT = function(){console.log(this)}
 - register controller
@@ -1593,6 +1648,7 @@ npm install bcryptjs
 #### JWT
 
 - token
+- This token could also be stored into the state in react (front end) and browser
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 
 ```sh
@@ -1621,8 +1677,12 @@ return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
 
 #### Complete Register
 
+- goal: We don't want the user's password be sent back to the front-end 
+
+###### In the mongoose. we can use the select to define the behavior when it returns the result 
 - password : {select:false}
 - complete response
+
 
 #### Concurrently
 
