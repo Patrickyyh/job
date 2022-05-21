@@ -1,6 +1,9 @@
 import 'express-async-errors';
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors'; 
+
+
 
 // DB and authenticateUser
 import connectDB from './db/connect.js'
@@ -12,6 +15,7 @@ import jobRouter from './routes/jobRoutes.js'
 
 dotenv.config();
 const app = express();
+app.use(cors())
 
 // middleware
 import notFoundMiddleWare from './middleware/not-found.js';
@@ -22,10 +26,10 @@ const port = process.env.PORT || 5001
 
 app.get('/', (req,res) => {
     // throw new Error('error')
-    res.send('welcome');
+    res.json({msg: 'Welcome'})
 })
 
-
+console.log("hellow"); 
 app.use('/api/v1/auth',authRouter); 
 app.use('/api/v1/jobs',jobRouter); 
 
