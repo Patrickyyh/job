@@ -1787,6 +1787,9 @@ return (
 
 #### Axios
 
+Axios is a promise-based HTTP Client for nodej.js and the browser/
+It can run in both nodejs and browser with the same codebase 
+
 - [axios docs](https://axios-http.com/docs/intro)
 - stop app
 - cd client
@@ -1880,14 +1883,33 @@ const Register = () => {
   useEffect(() => {
     if (user) {
       setTimeout(() => {
+        
         navigate('/')
       }, 3000)
     }
+ ///// This indicates that the useEffect will be called
+ // only the value of user and navigate changed 
   }, [user, navigate])
+
 }
+
 ```
 
 #### Local Storage
+- The localStorage objects allows you to save key/value 
+pairs in the browser. 
+
+
+- When we refrash the page on the dashboard page 
+we Will find that the state will disappear.
+- So we need to come up with an idea to store the state. 
+
+
+- Notice that the keys and value store with localStorage are always in the UTF-16 string format 
+- So when we tried to get it from the localStorage
+- we need to call the JSON.parse function to convert it 
+
+
 
 ```js
 appContext.js

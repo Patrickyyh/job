@@ -15,7 +15,7 @@ import jobRouter from './routes/jobRoutes.js'
 
 dotenv.config();
 const app = express();
-app.use(cors())
+// app.use(cors())
 
 // middleware
 import notFoundMiddleWare from './middleware/not-found.js';

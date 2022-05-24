@@ -1747,14 +1747,29 @@ on the moogoDB.</p>
 <h4>Mongoose - Custom Instance Methods</h4>
 <p><a href="https://mongoosejs.com/docs/guide.html#methods">Custom Instance Methods</a></p>
 <ul>
-<li>UserSchema.methods.createJWT = function(){console.log(this)}</li>
-<li>register controller</li>
-<li>right after User.create()</li>
-<li>invoke user.createJWT()</li>
+<li>
+<p>Documents have many of their own built-in instance methods</p>
+</li>
+<li>
+<p>we could define our own custom document instance methods</p>
+</li>
+<li>
+<p>UserSchema.methods.createJWT = function(){console.log(this)}</p>
+</li>
+<li>
+<p>register controller</p>
+</li>
+<li>
+<p>right after User.create()</p>
+</li>
+<li>
+<p>invoke user.createJWT()</p>
+</li>
 </ul>
 <h4>JWT</h4>
 <ul>
 <li>token</li>
+<li>This token could also be stored into the state in react (front end) and browser</li>
 <li><a href="https://www.npmjs.com/package/jsonwebtoken">jsonwebtoken</a></li>
 </ul>
 <pre data-role="codeBlock" data-info="sh" class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> jsonwebtoken
@@ -1774,6 +1789,10 @@ on the moogoDB.</p>
 <li>RESTART SERVER!!!!</li>
 </ul>
 <h4>Complete Register</h4>
+<ul>
+<li>goal: We don&apos;t want the user&apos;s password be sent back to the front-end</li>
+</ul>
+<h6>In the mongoose. we can use the select to define the behavior when it returns the result</h6>
 <ul>
 <li>password : {select:false}</li>
 <li>complete response</li>

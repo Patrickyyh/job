@@ -4,23 +4,23 @@ import axios from 'axios'
 
 export const Dashboard = () => {
   // try to fetch by axios 
-  const fetchData = async () =>{
-    try {
-      const response = await fetch('http://localhost:4000/')
-      const data = await response.json();
-      console.log(data);
-      console.log('----------');
-      console.log(response); 
+  // const fetchData = async () =>{
+  //   try {
+  //     const response = await fetch('http://localhost:4000/')
+  //     const data = await response.json();
+  //     console.log(data);
+  //     console.log('----------');
+  //     console.log(response); 
       
-    } catch (error) {
-      console.log(error);
-    }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
      
-  }
+  // }
 
-  useEffect(()=>{
-      fetchData();
-  },[])
+  // useEffect(()=>{
+  //     fetchData();
+  // },[])
 
 
   return (
