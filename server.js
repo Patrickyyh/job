@@ -2,7 +2,7 @@ import 'express-async-errors';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
-
+import morgan from 'morgan';
 
 
 // DB and authenticateUser
@@ -20,6 +20,11 @@ const app = express();
 // middleware
 import notFoundMiddleWare from './middleware/not-found.js';
 import { errorHandlerMiddle } from './middleware/error-handler.js';
+
+if(process.env.NODE_ENV !== 'production'){
+    app.use(morgan('dev'));
+}
+
 app.use(express.json()); 
 
 const port = process.env.PORT || 5001

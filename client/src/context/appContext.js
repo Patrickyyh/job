@@ -6,7 +6,11 @@ import {
     CLEAR_ALERT, 
     REGISTER_USER_BEGIN , 
     REGISTER_USER_SUCCESS,
-    REGISTER_USER_ERROR  } from './actions';
+    REGISTER_USER_ERROR ,
+    LOGIN_USER_BEGIN  ,
+    LOGIN_USER_SUCCESS,
+    LOGIN_USER_ERROR   ,   
+} from './actions';
 
 import reducers from './reducers';
 
@@ -64,6 +68,39 @@ const AppProvider = ({children})=>{
     }
 
 
+    // for login the user 
+
+    const loginUser = async (currentUser) =>{
+        dispatch({type: LOGIN_USER_BEGIN });
+
+       try {
+           const response = await axios.post('/api/v1/auth/login', currentUser);
+           const {user ,token , location} = response.data;
+           
+           // dispatch the action 
+           dispatch({
+               type: LOGIN_USER_SUCCESS,
+               payload: {
+                   user,
+                   token,
+                   location,
+               },
+           })
+        
+           addUserToLocalStorage({user, token, location}); 
+
+       } catch (error) {
+           
+            dispatch({
+                type: LOGIN_USER_ERROR,
+                payload: { msg: error.response.data.msg}
+            })
+       }
+        
+        clearAlert();
+    }
+
+
      // for registering the user 
     const registerUser = async (currentUser) => {
          // dispatch Job_create action 
@@ -71,7 +108,7 @@ const AppProvider = ({children})=>{
          
          try {
             const response = await axios.post('/api/v1/auth/register', currentUser);
-            console.log(response);
+             // console.log(response);
             const {user,token, location} = response.data;
             
             // dispatch 
@@ -98,7 +135,7 @@ const AppProvider = ({children})=>{
 
 
     return (
-          <AppContext.Provider value={{...state,displayAlert,registerUser}}>
+          <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser}}>
                 {children}
           </AppContext.Provider>
           )

@@ -1,9 +1,9 @@
 
 import User from "../models/User.js"
 import { StatusCodes } from "http-status-codes";
-import {BadRequestError,NotFoundError} from "../errors/index.js";
+import {BadRequestError,NotFoundError, UnauthenticatedError} from "../errors/index.js";
 
-
+//Register controller 
 const register =  async (req,res) => {
 
     /**
@@ -33,12 +33,47 @@ const register =  async (req,res) => {
             name: user.name,
         }
         ,token});
+
+
+
 }
 
+
+// Login controller 
 const login = async (req,res) => {
-    res.send('login user')
+
+    // extract the password and email 
+    const {email, password} = req.body;
+
+    if(!email || !password){
+        throw new BadRequestError('Please provide all values'); 
+    }
+
+    // want to find the user by email and password 
+    // extract the password. 
+    const user = await User.findOne({email}).select('+password');
+    console.log(user); 
+    if(!user){
+        throw new UnauthenticatedError('Invalid Credentials');
+    }
+
+    // compare the password 
+    const isMatch = await user.comparePassword(password);
+    if(!isMatch){
+        throw new UnauthenticatedError('Invalid Credentials');
+    }
+
+    // every time we login we need to create a new JWT
+    const token = user.createJWT();
+    
+    // make the password undefined for the safety 
+    user.password = undefined;
+    res.status(StatusCodes.OK).json({user, token , location: user.location})
+
 }
 
+
+// updateuser Controller  
 const updateUser =  async (req,res) => {
     res.send('update user');
      

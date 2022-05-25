@@ -30,7 +30,7 @@ export const Register = () => {
   }, [user, navigate]);
 
 
-  const {isLoading , showAlert,displayAlert,registerUser} = useAppContext();
+  const {isLoading , showAlert,displayAlert,registerUser,loginUser} = useAppContext();
   // console.log(state);
   
   const toggleMember =  () =>{
@@ -56,7 +56,7 @@ export const Register = () => {
     const currentUser = {name , email , password}; 
     if(isMemeber){
         // Login in the user 
-        console.log('already a member');
+        loginUser(currentUser);
     }else{
         // register the user and passing the value of the user into the
         // currentUser
