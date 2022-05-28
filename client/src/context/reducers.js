@@ -6,10 +6,30 @@ import { CLEAR_ALERT, DISPLAY_ALERT,
         LOGIN_USER_BEGIN  ,
         LOGIN_USER_SUCCESS ,
         LOGIN_USER_ERROR   ,  
+        LOGOUT_USER,
+        TOGGLE_SIDEBAR,
     } from './actions';
+
+import { initialState } from './appContext';
 
 
 const reducers = (state, action) => {
+
+    // Toggle the sidebar 
+    if(action.type === TOGGLE_SIDEBAR){
+        return {...state , showSideBar: !state.showSideBar}
+    }
+
+    // Log the user out
+     if(action.type === LOGOUT_USER){
+         return {
+             ... initialState  , 
+            user: null,
+            token: null,
+            userLocation: '',
+            jobLocation: ''
+        }
+     }
 
     // Register user begin reducers 
 

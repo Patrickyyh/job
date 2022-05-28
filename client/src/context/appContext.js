@@ -10,6 +10,8 @@ import {
     LOGIN_USER_BEGIN  ,
     LOGIN_USER_SUCCESS,
     LOGIN_USER_ERROR   ,   
+    LOGOUT_USER,
+    TOGGLE_SIDEBAR,
 } from './actions';
 
 import reducers from './reducers';
@@ -29,6 +31,7 @@ export const initialState = {
   token: token,
   userLocation: userLocation || '',
   jobLocation:  userLocation || '',
+  showSideBar: false, 
 }
 
 const AppContext = React.createContext();
@@ -66,6 +69,21 @@ const AppProvider = ({children})=>{
         localStorage.removeItem('location');
         
     }
+
+    // for siderbar
+    const toggleSidebar = () =>{
+        dispatch({type: TOGGLE_SIDEBAR})
+    }
+    
+
+    // for log out user 
+    const logoutUser = () => {
+        dispatch({ type: LOGOUT_USER })
+        removesUserToLocalStorage();
+      }
+      
+
+
 
 
     // for login the user 
@@ -135,9 +153,10 @@ const AppProvider = ({children})=>{
 
 
     return (
-          <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser}}>
+                
+                <AppContext.Provider value={{...state,displayAlert,registerUser,logoutUser,loginUser,toggleSidebar}}>
                 {children}
-          </AppContext.Provider>
+                 </AppContext.Provider>
           )
 }
 

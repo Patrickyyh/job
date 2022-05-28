@@ -10,7 +10,7 @@ Find the App Useful? [You can always buy me a coffee](https://www.buymeacoffee.c
 
 #### Run The App Locally
 
-```sh
+```sh 
 npm run install-dependencies
 ```
 
@@ -2262,9 +2262,15 @@ App.js
 ```
 
 #### Protected Route
+The goal of the protected Route:
+- Private Routes in React Router required a user being authorized to visit a route 
+- For example, if the user log out of our website. He will be kicked out if he tried to access the route which could only be accessed by the authorized user.
+
+- be returned to the landing pages   
+
 
 - create ProtectedRoute.js in pages
-- import/export
+- import/export         
 - wrap SharedLayout in App.js
 
 ```js
