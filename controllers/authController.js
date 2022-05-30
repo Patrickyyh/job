@@ -3,6 +3,7 @@ import User from "../models/User.js"
 import { StatusCodes } from "http-status-codes";
 import {BadRequestError,NotFoundError, UnauthenticatedError} from "../errors/index.js";
 
+
 //Register controller 
 const register =  async (req,res) => {
 
@@ -73,10 +74,35 @@ const login = async (req,res) => {
 }
 
 
-// updateuser Controller  
+// update user Controller  
 const updateUser =  async (req,res) => {
-    res.send('update user');
-     
+    const {email,name, location, lastName } = req.body;
+    if(!email  || !name || !location || !lastName){
+        throw new BadRequestError('Please provide all values'); 
+    }
+
+    // User the userID inside the reqbody to query the user 
+    const user = await User.findOne({_id: req.user.userId});
+
+    // update the corresponding value 
+    user.email    = email;
+    user.name     = name;
+    user.location = location;
+    user.lastName = lastName;
+    
+    // Saved the updated value
+    await user.save();
+    
+    //create a new token 
+    const token = user.createJWT();
+
+    // define the response
+    res.status(StatusCodes.OK).json({
+        user,
+        token,
+        location: User.location,
+    })
+
 }
 
 export {register,login,updateUser}

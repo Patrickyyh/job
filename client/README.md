@@ -2786,6 +2786,9 @@ router.route('/stats').get(authenticateUser, showStats)
 ```
 
 #### Auth - Bearer Schema
+- Whenever the user wants to access a protected route or resource, the user agent should send the JWT, typically in the Authorization header using the Bearer schema. The content of the header should look like the following:  `Authorization: Bearer <token>`
+- This can be, in certain cases, a stateless authorization mechanism. The server's protected routes will check for a valid JWT in the Authorization header, and if it's present, the user will be allowed to access protected resources. If the JWT contains the necessary data, the need to query the database for certain operations may be reduced, though this may not always be the case.
+
 
 ```js
 Postman
@@ -2812,6 +2815,10 @@ const auth = async (req, res, next) => {
 
 - register and login routes
 - Tests
+
+- Postman will extract the token value from the response of register and login routes and set it as the globals value in the postman. So we don't have to adjust the token in authentication header of other routes every time. 
+
+
 
 ```js
 const jsonData = pm.response.json()

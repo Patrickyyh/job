@@ -75,9 +75,7 @@ export const Register = () => {
          <Logo />
          <h3>{values.isMemeber? 'Login':'Register'}</h3>
           {showAlert && <Alert />}
-         {/* Now set up another components 
-            FormRow
-         */}
+         {/* Now set up another componentsFormRow */}
          {!values.isMemeber 
             && 
           <FormRow type = "text" name = "name" value = {values.name} handleChange = {handleChange}/>

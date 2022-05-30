@@ -42,14 +42,15 @@ const UserSchema = new mongoose.Schema({
 // pre middleware for mongoose. 
 //hashing the password before saved in the database 
  UserSchema.pre('save',async function(){
-     const salt = await bcryptjs.genSalt(10);
-     this.password = await bcryptjs.hash(this.password,salt); 
+   //   const salt = await bcryptjs.genSalt(10);
+   //   this.password = await bcryptjs.hash(this.password,salt); 
  });
 
 
 
  //build method for the User Model 
  UserSchema.methods.createJWT = function(){
+    // the userId is basically the id of the user in mongoDB
     return jsonwebtoken.sign({userId:this._id},process.env.JWT_SECRET,{expiresIn: '1d'})
  }
 
