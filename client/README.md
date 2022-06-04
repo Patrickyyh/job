@@ -2917,6 +2917,13 @@ const updateUser = async (req, res) => {
 
 - user.save() vs User.findOneAndUpdate
 
+- The reason the following code will lead to some problem 
+1. When the find function be called inside the controller, the password will not be returned from the database 
+2. Even the password returned, it stills not work. Because once we call save function, the pre built in function will be called as well. And the passowrd which is alreadly hashed and stored into the database will be accessed and hashed for the second time. 
+
+3. In order to solve this logic error, we need to use the `isModified('name')` function to verify if specific area of the information is updated. 
+
+`Returns true if any of the given paths is modified, else false. If no arguments, returns true if any path in this document is modified.`
 ```js
 User.js
 
@@ -3034,6 +3041,8 @@ const updaterUser = async (currentUser) => {
 ```
 
 #### Axios - Global Setup
+- The global setup is still not an ideal setup 
+- The token will be put inside every request we send inside our application. 
 
 ```js
 appContext.js
@@ -3042,6 +3051,8 @@ axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`
 ```
 
 #### Axios - Setup Instance
+
+
 
 ```js
 AppContext.js
@@ -3065,6 +3076,8 @@ const updaterUser = async (currentUser) => {
 #### Axios - Interceptors
 
 - will use instance, but can use axios instead
+- With Axios Internceptors, we don't have to handle the 401 authentications errors
+in each individual request.
 
 ```js
 appContext.js

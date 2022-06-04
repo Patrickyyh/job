@@ -36,10 +36,48 @@ export const initialState = {
 
 const AppContext = React.createContext();
 
+
 const AppProvider = ({children})=>{
-    
+
+
+
     // return the updated state and a dispatch function
     const [state , dispatch] = useReducer(reducers,initialState);
+
+    // set up the header for the axios
+    const authFetch = axios.create({
+        baseURL: '/api/v1/',
+    })
+
+
+  // interceptors for the request 
+  authFetch.interceptors.request.use(
+    (config) => {
+    //   config.headers.common['Authorization'] = `Bearer ${state.token}`
+      return config
+    },
+    (error) => {
+      return Promise.reject(error)
+    }
+  )
+
+// interceptors for the response 
+authFetch.interceptors.response.use(
+    (response)=>{
+        return response; 
+    },
+
+    (error) => {
+        console.log(error.response)
+        if (error.response.status === 401) {
+          console.log('AUTH ERROR')
+        }
+        return Promise.reject(error)
+      }
+
+)
+
+    
     
     const displayAlert = () => {
             dispatch({type: DISPLAY_ALERT})
@@ -83,6 +121,22 @@ const AppProvider = ({children})=>{
       }
       
 
+   
+   
+
+
+    // for update user
+    const updateUser = async (currentUser) => {
+
+        try {
+            const response = await authFetch.patch('/auth/updateUser',currentUser)
+            console.log(response.data); 
+            // we might use addUserToLocalStorage to add the token to the browser 
+        } catch (error) {
+            
+        }
+       
+    }
 
 
 
@@ -154,7 +208,9 @@ const AppProvider = ({children})=>{
 
     return (
                 
-                <AppContext.Provider value={{...state,displayAlert,registerUser,logoutUser,loginUser,toggleSidebar}}>
+                <AppContext.Provider value={{...state,displayAlert,  registerUser,
+                                                      logoutUser  ,  loginUser,
+                                                      toggleSidebar, updateUser}}>
                 {children}
                  </AppContext.Provider>
           )

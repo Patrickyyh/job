@@ -97,8 +97,7 @@ const reducers = (state, action) => {
         }
     }
 
-
-
+     // handle the missing field errors 
     if(action.type === DISPLAY_ALERT){
         return {
                 ...state ,
