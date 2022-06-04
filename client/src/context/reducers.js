@@ -8,6 +8,10 @@ import { CLEAR_ALERT, DISPLAY_ALERT,
         LOGIN_USER_ERROR   ,  
         LOGOUT_USER,
         TOGGLE_SIDEBAR,
+        UPDATE_USER_BEGIN,
+        UPDATE_USER_SUCCESS,
+        UPDATE_USER_ERROR,
+        HANDLE_CHANGE,
     } from './actions';
 
 import { initialState } from './appContext';
@@ -19,6 +23,46 @@ const reducers = (state, action) => {
     if(action.type === TOGGLE_SIDEBAR){
         return {...state , showSideBar: !state.showSideBar}
     }
+
+    // Handle Change
+    if(action.type === HANDLE_CHANGE){
+        return {...state, [action.payload.name] : action.payload.value }
+    }
+
+    // UPDATE USER BEGIN
+    if(action.type === UPDATE_USER_BEGIN){
+        return {...state , isLoading: true}
+    }
+    //UPDATE USER SUCCESS
+    if(action.type === UPDATE_USER_SUCCESS){
+        return {...state ,    
+            user: action.payload.user,
+            token: action.payload.token,
+            userLocation : action.payload.location,
+            jobLocation: action.payload.location,
+            isLoading: false,
+            showAlert: true, 
+            alertText: 'User Profile updated',
+            alertType: 'success',
+        
+            }
+    }
+    
+
+
+    //UPDATE USER ERROR 
+    if(action.type === UPDATE_USER_ERROR){
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true,
+            alertType : 'danger',
+            alertText : action.payload.msg,
+        }
+
+    }
+
+
 
     // Log the user out
      if(action.type === LOGOUT_USER){

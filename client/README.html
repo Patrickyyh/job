@@ -1874,6 +1874,8 @@ app<span class="token punctuation">.</span><span class="token method function pr
   <span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span>
 <span class="token punctuation">)</span>
 </pre><h4>Axios</h4>
+<p>Axios is a promise-based HTTP Client for nodej.js and the browser/<br>
+It can run in both nodejs and browser with the same codebase</p>
 <ul>
 <li><a href="https://axios-http.com/docs/intro">axios docs</a></li>
 <li>stop app</li>
@@ -1957,12 +1959,39 @@ app<span class="token punctuation">.</span><span class="token method function pr
   <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token arrow operator">=&gt;</span> <span class="token punctuation">{</span>
     <span class="token keyword control-flow keyword-if">if</span> <span class="token punctuation">(</span>user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
       <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token arrow operator">=&gt;</span> <span class="token punctuation">{</span>
+        
         <span class="token function">navigate</span><span class="token punctuation">(</span><span class="token string">&apos;/&apos;</span><span class="token punctuation">)</span>
       <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
+ <span class="token comment">///// This indicates that the useEffect will be called</span>
+ <span class="token comment">// only the value of user and navigate changed </span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>user<span class="token punctuation">,</span> navigate<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
 <span class="token punctuation">}</span>
+
 </pre><h4>Local Storage</h4>
+<ul>
+<li>
+<p>The localStorage objects allows you to save key/value<br>
+pairs in the browser.</p>
+</li>
+<li>
+<p>When we refrash the page on the dashboard page<br>
+we Will find that the state will disappear.</p>
+</li>
+<li>
+<p>So we need to come up with an idea to store the state.</p>
+</li>
+<li>
+<p>Notice that the keys and value store with localStorage are always in the UTF-16 string format</p>
+</li>
+<li>
+<p>So when we tried to get it from the localStorage</p>
+</li>
+<li>
+<p>we need to call the JSON.parse function to convert it</p>
+</li>
+</ul>
 <pre data-role="codeBlock" data-info="js" class="language-javascript">appContext<span class="token punctuation">.</span><span class="token property-access">js</span>
 <span class="token keyword keyword-const">const</span> <span class="token function-variable function">addUserToLocalStorage</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> user<span class="token punctuation">,</span> token<span class="token punctuation">,</span> <span class="token dom variable">location</span> <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token arrow operator">=&gt;</span> <span class="token punctuation">{</span>
   <span class="token dom variable">localStorage</span><span class="token punctuation">.</span><span class="token method function property-access">setItem</span><span class="token punctuation">(</span><span class="token string">&apos;user&apos;</span><span class="token punctuation">,</span> <span class="token known-class-name class-name">JSON</span><span class="token punctuation">.</span><span class="token method function property-access">stringify</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -2253,10 +2282,26 @@ app<span class="token punctuation">.</span><span class="token method function pr
 
 <span class="token operator">&lt;</span><span class="token maybe-class-name">Route</span> index element<span class="token operator">=</span><span class="token punctuation">{</span><span class="token operator">&lt;</span><span class="token maybe-class-name">Stats</span><span class="token operator">/</span><span class="token operator">&gt;</span><span class="token punctuation">}</span> <span class="token operator">&gt;</span>
 </pre><h4>Protected Route</h4>
+<p>The goal of the protected Route:</p>
 <ul>
-<li>create ProtectedRoute.js in pages</li>
-<li>import/export</li>
-<li>wrap SharedLayout in App.js</li>
+<li>
+<p>Private Routes in React Router required a user being authorized to visit a route</p>
+</li>
+<li>
+<p>For example, if the user log out of our website. He will be kicked out if he tried to access the route which could only be accessed by the authorized user.</p>
+</li>
+<li>
+<p>be returned to the landing pages</p>
+</li>
+<li>
+<p>create ProtectedRoute.js in pages</p>
+</li>
+<li>
+<p>import/export</p>
+</li>
+<li>
+<p>wrap SharedLayout in App.js</p>
+</li>
 </ul>
 <pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token operator">&lt;</span><span class="token maybe-class-name">Route</span>
   path<span class="token operator">=</span><span class="token string">&apos;/&apos;</span>
@@ -2680,6 +2725,10 @@ app<span class="token punctuation">.</span><span class="token method function pr
 
 router<span class="token punctuation">.</span><span class="token method function property-access">route</span><span class="token punctuation">(</span><span class="token string">&apos;/stats&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token method function property-access">get</span><span class="token punctuation">(</span>authenticateUser<span class="token punctuation">,</span> showStats<span class="token punctuation">)</span>
 </pre><h4>Auth - Bearer Schema</h4>
+<ul>
+<li>Whenever the user wants to access a protected route or resource, the user agent should send the JWT, typically in the Authorization header using the Bearer schema. The content of the header should look like the following:  <code>Authorization: Bearer &lt;token&gt;</code></li>
+<li>This can be, in certain cases, a stateless authorization mechanism. The server&apos;s protected routes will check for a valid JWT in the Authorization header, and if it&apos;s present, the user will be allowed to access protected resources. If the JWT contains the necessary data, the need to query the database for certain operations may be reduced, though this may not always be the case.</li>
+</ul>
 <pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token maybe-class-name">Postman</span>
 
 <span class="token maybe-class-name">Headers</span>
@@ -2697,8 +2746,15 @@ router<span class="token punctuation">.</span><span class="token method function
 <span class="token punctuation">}</span>
 </pre><h4>Postman - Set Token Programmatically</h4>
 <ul>
-<li>register and login routes</li>
-<li>Tests</li>
+<li>
+<p>register and login routes</p>
+</li>
+<li>
+<p>Tests</p>
+</li>
+<li>
+<p>Postman will extract the token value from the response of register and login routes and set it as the globals value in the postman. So we don&apos;t have to adjust the token in authentication header of other routes every time.</p>
+</li>
 </ul>
 <pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token keyword keyword-const">const</span> jsonData <span class="token operator">=</span> pm<span class="token punctuation">.</span><span class="token property-access">response</span><span class="token punctuation">.</span><span class="token method function property-access">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 pm<span class="token punctuation">.</span><span class="token property-access">globals</span><span class="token punctuation">.</span><span class="token method function property-access">set</span><span class="token punctuation">(</span><span class="token string">&apos;token&apos;</span><span class="token punctuation">,</span> jsonData<span class="token punctuation">.</span><span class="token property-access">token</span><span class="token punctuation">)</span>
@@ -2780,8 +2836,25 @@ pm<span class="token punctuation">.</span><span class="token property-access">gl
 <span class="token punctuation">}</span>
 </pre><h4>Modified Paths</h4>
 <ul>
-<li>user.save() vs User.findOneAndUpdate</li>
+<li>
+<p>user.save() vs User.findOneAndUpdate</p>
+</li>
+<li>
+<p>The reason the following code will lead to some problem</p>
+</li>
 </ul>
+<ol>
+<li>
+<p>When the find function be called inside the controller, the password will not be returned from the database</p>
+</li>
+<li>
+<p>Even the password returned, it stills not work. Because once we call save function, the pre built in function will be called as well. And the passowrd which is alreadly hashed and stored into the database will be accessed and hashed for the second time.</p>
+</li>
+<li>
+<p>In order to solve this logic error, we need to use the <code>isModified(&apos;name&apos;)</code> function to verify if specific area of the information is updated.</p>
+</li>
+</ol>
+<p><code>Returns true if any of the given paths is modified, else false. If no arguments, returns true if any path in this document is modified.</code></p>
 <pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token maybe-class-name">User</span><span class="token punctuation">.</span><span class="token property-access">js</span>
 
 <span class="token maybe-class-name">UserSchema</span><span class="token punctuation">.</span><span class="token method function property-access">pre</span><span class="token punctuation">(</span><span class="token string">&apos;save&apos;</span><span class="token punctuation">,</span> <span class="token keyword keyword-async">async</span> <span class="token keyword keyword-function">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -2885,6 +2958,10 @@ value<span class="token operator">=</span><span class="token punctuation">{</spa
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </pre><h4>Axios - Global Setup</h4>
+<ul>
+<li>The global setup is still not an ideal setup</li>
+<li>The token will be put inside every request we send inside our application.</li>
+</ul>
 <pre data-role="codeBlock" data-info="js" class="language-javascript">appContext<span class="token punctuation">.</span><span class="token property-access">js</span>
 
 axios<span class="token punctuation">.</span><span class="token property-access">defaults</span><span class="token punctuation">.</span><span class="token property-access">headers</span><span class="token punctuation">.</span><span class="token property-access">common</span><span class="token punctuation">[</span><span class="token string">&apos;Authorization&apos;</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Bearer </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>state<span class="token punctuation">.</span><span class="token property-access">token</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span>
@@ -2908,6 +2985,8 @@ axios<span class="token punctuation">.</span><span class="token property-access"
 </pre><h4>Axios - Interceptors</h4>
 <ul>
 <li>will use instance, but can use axios instead</li>
+<li>With Axios Internceptors, we don&apos;t have to handle the 401 authentications errors<br>
+in each individual request.</li>
 </ul>
 <pre data-role="codeBlock" data-info="js" class="language-javascript">appContext<span class="token punctuation">.</span><span class="token property-access">js</span>
 
@@ -2991,6 +3070,10 @@ authFetch<span class="token punctuation">.</span><span class="token property-acc
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </pre><h4>401 Error - Logout User</h4>
+<ul>
+<li>When the user no longer has the token, the user<br>
+should be loggout automatically.</li>
+</ul>
 <pre data-role="codeBlock" data-info="js" class="language-javascript">appContext<span class="token punctuation">.</span><span class="token property-access">js</span>
 <span class="token comment">// response interceptor</span>
 authFetch<span class="token punctuation">.</span><span class="token property-access">interceptors</span><span class="token punctuation">.</span><span class="token property-access">response</span><span class="token punctuation">.</span><span class="token method function property-access">use</span><span class="token punctuation">(</span>

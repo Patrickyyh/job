@@ -1,7 +1,21 @@
+import Job from "../models/Job.js"
+import { StatusCodes } from "http-status-codes"
+import {BadRequestError,NotFoundError, UnauthenticatedError} from "../errors/index.js";
+
 const createJob = async (req,res) => {
-    res.send('create job ')
+    const {company, position} = req.body;
+    if(!company || !position){
+        throw new BadRequestError('Please provide all value');
+    }
+
+    //The req user userId has been set up in the unauthenticated middle-ware
+    req.body.createdBy = req.user.userId; 
+    const job = await Job.create(req.body);
+    res.status(StatusCodes.OK).json({job});
 
 }
+
+
 const deleteJob= async (req,res) => {
     res.send('delete job ')
 

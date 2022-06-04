@@ -12,6 +12,10 @@ import {
     LOGIN_USER_ERROR   ,   
     LOGOUT_USER,
     TOGGLE_SIDEBAR,
+    UPDATE_USER_BEGIN,
+    UPDATE_USER_SUCCESS,
+    UPDATE_USER_ERROR,
+    HANDLE_CHANGE,
 } from './actions';
 
 import reducers from './reducers';
@@ -32,6 +36,16 @@ export const initialState = {
   userLocation: userLocation || '',
   jobLocation:  userLocation || '',
   showSideBar: false, 
+  isEditing: false,
+  editJobId: '',
+  position: '',
+  company: '',
+  jobLocation: userLocation || '',
+  jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
+  jobType: 'full-time',
+  statusOptions: ['pending', 'interview', 'declined'],
+  status: 'pending',
+  
 }
 
 const AppContext = React.createContext();
@@ -53,7 +67,7 @@ const AppProvider = ({children})=>{
   // interceptors for the request 
   authFetch.interceptors.request.use(
     (config) => {
-    //   config.headers.common['Authorization'] = `Bearer ${state.token}`
+      config.headers.common['Authorization'] = `Bearer ${state.token}`
       return config
     },
     (error) => {
@@ -68,16 +82,16 @@ authFetch.interceptors.response.use(
     },
 
     (error) => {
-        console.log(error.response)
+       
         if (error.response.status === 401) {
-          console.log('AUTH ERROR')
+           // logout the user 
+           logoutUser(); 
         }
         return Promise.reject(error)
       }
 
 )
 
-    
     
     const displayAlert = () => {
             dispatch({type: DISPLAY_ALERT})
@@ -112,6 +126,13 @@ authFetch.interceptors.response.use(
     const toggleSidebar = () =>{
         dispatch({type: TOGGLE_SIDEBAR})
     }
+
+    // handle the change value
+    const handleChange = ({name, value})=>{
+        dispatch({type: HANDLE_CHANGE,
+            payload:{name, value}
+        })
+    }
     
 
     // for log out user 
@@ -120,21 +141,36 @@ authFetch.interceptors.response.use(
         removesUserToLocalStorage();
       }
       
-
-   
-   
-
-
     // for update user
     const updateUser = async (currentUser) => {
+        dispatch({type: UPDATE_USER_BEGIN});
 
         try {
             const response = await authFetch.patch('/auth/updateUser',currentUser)
-            console.log(response.data); 
-            // we might use addUserToLocalStorage to add the token to the browser 
+            const {user, location,token} = response.data
+            dispatch({
+                type: UPDATE_USER_SUCCESS,
+                payload: {
+                    user,
+                    token,
+                    location
+                }
+            })
+ 
+          //  add the user to the localStorage  
+             addUserToLocalStorage({user, token, location}); 
         } catch (error) {
-            
+
+            // only dispatch this action when it is not 401 error
+            // beacause the user will be loged out automatically 
+            if(error.response.status !== 401){
+              dispatch({
+                  type: UPDATE_USER_ERROR,
+                  payload: { msg: error.response.data.msg}
+              })
+          }
         }
+        clearAlert();
        
     }
 
@@ -210,7 +246,8 @@ authFetch.interceptors.response.use(
                 
                 <AppContext.Provider value={{...state,displayAlert,  registerUser,
                                                       logoutUser  ,  loginUser,
-                                                      toggleSidebar, updateUser}}>
+                                                      toggleSidebar, updateUser,
+                                                      handleChange}}>
                 {children}
                  </AppContext.Provider>
           )

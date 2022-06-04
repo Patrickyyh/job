@@ -40,7 +40,7 @@ export const Register = () => {
   const handleChange = (e) => {
     //update the values in the state 
     setValues({...values,[e.target.name]: e.target.value})
-    console.log(values);
+    
   }
   
   const onSubmit = (e) =>{

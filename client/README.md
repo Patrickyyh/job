@@ -3174,6 +3174,8 @@ if (action.type === UPDATE_USER_ERROR) {
 ```
 
 #### 401 Error - Logout User
+- When the user no longer has the token, the user 
+should be loggout automatically.
 
 ```js
 appContext.js
