@@ -3,6 +3,7 @@ import { FormRow, Alert } from '../../components'
 import Wrapper from '../../assets/wrappers/DashboardFormPage';
 import { useAppContext } from '../../context/appContext';
 import FormRowSelect from '../../components/FormRowSelect';
+import { MdEscalatorWarning } from 'react-icons/md';
 
 
 const AddJobs = () => {
@@ -18,6 +19,8 @@ const AddJobs = () => {
     status,
     statusOptions,
     handleChange,
+    clearValues,
+    createJob,
   } = useAppContext()
  
   // handleSubmit 
@@ -27,9 +30,13 @@ const AddJobs = () => {
       displayAlert();
       return; 
     }
-
+    if(isEditing){
+      // editJob()
+      return ; 
+    }
     // adJob 
-    console.log('create the job'); 
+    createJob();
+    // console.log('create the job'); 
   }
 
   // handle Job input 
@@ -115,7 +122,21 @@ const AddJobs = () => {
           >
             submit
           </button>
+
+
+          <button className='btn btn-block clear-btn'
+            onClick={(e) => {
+                e.preventDefault()
+                clearValues();
+            }}
+          >
+            clear
+          </button>
         </div>
+
+      
+
+    
       </div>
     </form>
   </Wrapper>

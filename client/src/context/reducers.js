@@ -12,6 +12,10 @@ import { CLEAR_ALERT, DISPLAY_ALERT,
         UPDATE_USER_SUCCESS,
         UPDATE_USER_ERROR,
         HANDLE_CHANGE,
+        CLEAR_VALUES,
+        CREATE_JOB_BEGIN  ,
+        CREATE_JOB_SUCCESS,
+        CREATE_JOB_ERROR  ,
     } from './actions';
 
 import { initialState } from './appContext';
@@ -23,6 +27,44 @@ const reducers = (state, action) => {
     if(action.type === TOGGLE_SIDEBAR){
         return {...state , showSideBar: !state.showSideBar}
     }
+    
+
+    // Clear the values 
+    if(action.type === CLEAR_VALUES){
+        const updateState = {
+            isEditing: false,
+            editJobId: '',
+            position: '',
+            company: '',
+            jobLocation: state.userLocation,
+            jobType: 'full-time',
+            status: 'pending',
+        }
+        return {...state, ...updateState}
+    }
+
+    if(action.type === CREATE_JOB_BEGIN){
+        return {...state, isLoading: true}
+    }
+
+    if(action.type === CREATE_JOB_SUCCESS){
+        return {...state, 
+            isLoading: false,
+            showAlert: true,
+            alertType:'success',
+            alertText: 'New job Created!',
+        }
+    }
+
+    if(action.type === CREATE_JOB_ERROR){
+        return {...state, 
+            isLoading: false,
+            showAlert: true,
+            alertType:'danger',
+            alertText: action.payload.msg,
+        }
+    }
+
 
     // Handle Change
     if(action.type === HANDLE_CHANGE){

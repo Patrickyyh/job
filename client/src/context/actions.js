@@ -1,5 +1,7 @@
 export const DISPLAY_ALERT = 'SHOW_ALERT';
 export const CLEAR_ALERT = 'CLEAR_ALERT';
+
+// Register user 
 export const REGISTER_USER_BEGIN = 'REGISTER_USER_BEGIN';
 export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
 export const REGISTER_USER_ERROR = 'REGISTER_USER_ERROR';
@@ -24,5 +26,12 @@ export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
 export const HANDLE_CHANGE = 'HANDLE_CHANGE'
 
 
+// Clear all the values in the the add job field 
+export const CLEAR_VALUES = 'CLEAR_VALUES';
 
+
+// Create Job Actions 
+export const CREATE_JOB_BEGIN   =    'CREATE_JOB_BEGIN  '
+export const CREATE_JOB_SUCCESS =    'CREATE_JOB_SUCCESS'
+export const CREATE_JOB_ERROR   =    'CREATE_JOB_ERROR  '
 
