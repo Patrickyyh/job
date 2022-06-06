@@ -7,18 +7,38 @@ import { useAppContext } from '../context/appContext'
 
 const JobsContainer = () => {
  const {getJobs,jobs,page,totalJobs ,isLoading} = useAppContext();
- useEffect(()=>{
-     getJobs();
- },[])
+ 
+   // fetch the jobs by calling the getjobs function 
+    useEffect(()=>{
+         getJobs();
+    },[])
 
  if(isLoading){
      // return the loading if it is loading currently. 
      return <Loading center/> 
  }
+
+
+ if(jobs.length === 0){
+    return (
+        <Wrapper>
+            <h2>No jobs to display</h2>
+        </Wrapper>
+    )
+}
+
   
   return (
-    <h2>JobsContainer</h2>
-
+    <Wrapper>
+    <h5>
+      {totalJobs} job{jobs.length > 1 && 's'} found
+    </h5>
+    <div className='jobs'>
+      {jobs.map((job) => {
+        return <Job key={job._id} value= {job} />
+      })}
+    </div>
+  </Wrapper>
   )
 }
 

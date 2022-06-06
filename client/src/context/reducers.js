@@ -18,6 +18,7 @@ import { CLEAR_ALERT, DISPLAY_ALERT,
         CREATE_JOB_ERROR  ,
         GET_JOBS_BEGIN,
         GET_JOBS_SUCCESS, 
+        SET_EDIT_JOB,
     } from './actions';
 
 import { initialState } from './appContext';
@@ -80,6 +81,31 @@ const reducers = (state, action) => {
                 numOfPage: action.payload.numOfPage
             }
     }
+
+    if(action.type === SET_EDIT_JOB){
+         let job = undefined;
+
+         // finding the job id with specific.
+         for(let i = 0 ; i < state.jobs.length ; i++){
+        
+             if(state.jobs[i]._id === action.payload.id){
+                 job = state.jobs[i];
+             }
+         }
+         
+         const {_id, position, company, jobLocation, jobType, status } = job;
+         
+         return {...state,
+                    isEditing: true,
+                    editJobId: _id,
+                    position,
+                    company,
+                    jobLocation,
+                    jobType,
+                    status,
+                }
+
+        }   
 
 
     // Handle Change

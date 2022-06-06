@@ -22,6 +22,7 @@ import {
     CREATE_JOB_ERROR  ,
     GET_JOBS_BEGIN   ,
     GET_JOBS_SUCCESS ,
+    SET_EDIT_JOB,
 } from './actions';
 
 import reducers from './reducers';
@@ -206,7 +207,7 @@ authFetch.interceptors.response.use(
            // For development convinent. 
         }
 
-        
+
         clearAlert();
     }
     
@@ -314,9 +315,26 @@ authFetch.interceptors.response.use(
          clearAlert(); 
     }
 
-    useEffect (()=>{
-        getJobs();
-    },[])
+    // pre-set edit job 
+    const setEditJob = (id) =>{
+         dispatch({type: SET_EDIT_JOB, payload: {id}})
+    }
+
+    // set edit job
+    const editJob =  () => {
+        console.log('editJob');
+    }
+    
+
+    const deleteJob = (id) =>{
+        console.log(`delete id job ${id}`);
+    }
+
+    // deletejob 
+
+    // useEffect (()=>{
+    //     getJobs();
+    // },[])
 
 
     return (
@@ -325,7 +343,9 @@ authFetch.interceptors.response.use(
                                                       logoutUser  ,  loginUser,
                                                       toggleSidebar, updateUser,
                                                       handleChange,  clearValues ,
-                                                      createJob,     getJobs}}>
+                                                      createJob,     getJobs,
+                                                      setEditJob ,   editJob ,
+                                                      deleteJob}}>
                 {children}
                  </AppContext.Provider>
           )

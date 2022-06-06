@@ -3973,6 +3973,11 @@ return (
 ```
 
 #### SetEditJob
+- The target of the `SetEditJob`
+  - When the user try to click edit button in the all jobs. The User will be navigated 
+  - to the add jobs
+  - So we use the `SetEditJob` to fetch the corresponding job information and display them 
+    on the form.
 
 ```js
 actions.js
