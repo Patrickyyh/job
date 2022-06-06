@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import React, { useState, useReducer, useContext } from 'react'
+import React, { useState, useReducer, useContext,useEffect } from 'react'
 import { 
     DISPLAY_ALERT,
     CLEAR_ALERT, 
@@ -20,6 +20,8 @@ import {
     CREATE_JOB_BEGIN  ,
     CREATE_JOB_SUCCESS,
     CREATE_JOB_ERROR  ,
+    GET_JOBS_BEGIN   ,
+    GET_JOBS_SUCCESS ,
 } from './actions';
 
 import reducers from './reducers';
@@ -49,6 +51,10 @@ export const initialState = {
   jobType: 'full-time',
   statusOptions: ['pending', 'interview', 'declined'],
   status: 'pending',
+  jobs:[],
+  totalJobs: 0,
+  numbOfPages: 1,
+  page: 1,
   
 }
 
@@ -176,6 +182,33 @@ authFetch.interceptors.response.use(
         
         clearAlert(); 
     }
+
+
+    // get All jobs 
+    const getJobs = async () => {
+        dispatch({type: GET_JOBS_BEGIN});
+        try {
+            const response = await authFetch.get('/jobs') ;
+            const {jobs, totalJobs,numOfPages} = response.data; 
+            
+            dispatch({
+                type: GET_JOBS_SUCCESS,
+                payload: {
+                    jobs,
+                    totalJobs,
+                    numOfPages,
+                }
+            })
+
+        } catch (error) {
+            console.log(error.response);
+            // adding this logic later logoutUser()
+           // For development convinent. 
+        }
+
+        
+        clearAlert();
+    }
     
 
     // for log out user 
@@ -281,6 +314,10 @@ authFetch.interceptors.response.use(
          clearAlert(); 
     }
 
+    useEffect (()=>{
+        getJobs();
+    },[])
+
 
     return (
                 
@@ -288,7 +325,7 @@ authFetch.interceptors.response.use(
                                                       logoutUser  ,  loginUser,
                                                       toggleSidebar, updateUser,
                                                       handleChange,  clearValues ,
-                                                      createJob}}>
+                                                      createJob,     getJobs}}>
                 {children}
                  </AppContext.Provider>
           )
