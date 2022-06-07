@@ -4034,7 +4034,7 @@ const handleSubmit = (e) => {
 ```
 
 #### Edit Job - Server
-
+-  Implementation of the updateJob logic at the backend
 ```js
 jobsController.js
 
@@ -4100,6 +4100,11 @@ const updateJob = async (req, res) => {
 ```
 
 #### Check Permissions
+-  When we login the account of another user
+-  We still could update the job of previous user by the jobID 
+-  So we need check Permissions to prevent this from happening 
+
+
 
 ```js
 jobsController.js

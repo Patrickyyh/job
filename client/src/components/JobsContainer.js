@@ -20,7 +20,8 @@ const JobsContainer = () => {
 
 
  if(jobs.length === 0){
-    return (
+
+     return (
         <Wrapper>
             <h2>No jobs to display</h2>
         </Wrapper>

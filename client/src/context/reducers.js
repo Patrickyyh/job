@@ -86,8 +86,8 @@ const reducers = (state, action) => {
          let job = undefined;
 
          // finding the job id with specific.
+         // we could make this part shorten 
          for(let i = 0 ; i < state.jobs.length ; i++){
-        
              if(state.jobs[i]._id === action.payload.id){
                  job = state.jobs[i];
              }
