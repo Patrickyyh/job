@@ -2,6 +2,8 @@ import Job from "../models/Job.js"
 import { StatusCodes } from "http-status-codes"
 import {BadRequestError,NotFoundError, UnauthenticatedError} from "../errors/index.js";
 import checkPermissions from '../utils/checkPermissions.js'
+import mongoose from "mongoose";
+
 
 const createJob = async (req,res) => {
     const {company, position} = req.body;
@@ -70,15 +72,38 @@ const updateJob= async (req,res) => {
     job.jobLocation = jobLocation;
     job.status = status 
     await job.save();
-   
-
-
     res.status(StatusCodes.OK).json({job});
       
 }
 
 const showStats = async(req,res) => {
-    res.send('show stats'); 
+    let stats = await Job.aggregate([
+        {$match: {createdBy: mongoose.Types.ObjectId(req.user.userId)}},
+        {$group: {_id: '$status', count: {$sum: 1}}}
+
+    ]);
+
+    stats = stats.reduce((total ,current)=>{
+        const {_id: title, count} = current;
+        total[title] = count
+        return total
+      },{})
+
+      // set up the default value for the status
+      const defaultStats = {
+          pending: stats.pending || 0 ,
+          interview: stats.interview || 0,
+          declined:  stats.declined || 0 ,
+      }
+
+    let monthlyApplications = []; 
+      //javascript reduce over here 
+      // return the number of pending, interview .....
+    res.status(StatusCodes.OK).json({defaultStats , monthlyApplications});
+
+    
+
+    
 }
 
 

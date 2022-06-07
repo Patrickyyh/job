@@ -23,6 +23,12 @@ import {
     GET_JOBS_BEGIN   ,
     GET_JOBS_SUCCESS ,
     SET_EDIT_JOB,
+    DELETE_JOB_BEGIN, 
+    EDIT_JOB_BEGIN   ,
+    EDIT_JOB_SUCCESS,
+    EDIT_JOB_ERROR  ,
+    SHOW_STATS_BEGIN   ,
+    SHOW_STATS_SUCCESS ,
 } from './actions';
 
 import reducers from './reducers';
@@ -56,6 +62,8 @@ export const initialState = {
   totalJobs: 0,
   numbOfPages: 1,
   page: 1,
+  stats: {},
+  monthlyApplications: [], 
   
 }
 
@@ -87,7 +95,7 @@ const AppProvider = ({children})=>{
   )
 
 // interceptors for the response 
-authFetch.interceptors.response.use(
+  authFetch.interceptors.response.use(
     (response)=>{
         return response; 
     },
@@ -101,61 +109,60 @@ authFetch.interceptors.response.use(
         return Promise.reject(error)
       }
 
-)
+  )
 
     
-    const displayAlert = () => {
-            dispatch({type: DISPLAY_ALERT})
-          clearAlert(); 
-    }
+const displayAlert = () => {
+        dispatch({type: DISPLAY_ALERT})
+      clearAlert(); 
+}
 
-    const clearAlert = () =>{
-        setTimeout(() => {
-            dispatch({type: CLEAR_ALERT})
-        }, 3000)
-
-    }
+const clearAlert = () =>{
+    setTimeout(() => {
+        dispatch({type: CLEAR_ALERT})
+    }, 3000)
+}
 
 
     // add the user into the  local storage
-    const addUserToLocalStorage  = ({user, token,location}) =>{
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('token',token);
-        localStorage.setItem('location', location);
-    }
+ const addUserToLocalStorage  = ({user, token,location}) =>{
+     localStorage.setItem('user', JSON.stringify(user));
+     localStorage.setItem('token',token);
+     localStorage.setItem('location', location);
+ }
 
 
      // remove the user from the local storage
-    const removesUserToLocalStorage  = () =>{
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        localStorage.removeItem('location');
-        
-    }
+ const removesUserToLocalStorage  = () =>{
+     localStorage.removeItem('user');
+     localStorage.removeItem('token');
+     localStorage.removeItem('location');
+     
+ }
 
     // for siderbar
-    const toggleSidebar = () =>{
+ const toggleSidebar = () =>{
         dispatch({type: TOGGLE_SIDEBAR})
-    }
+ }
 
-    // clear all the values 
-    const clearValues  = ()=>{
+ // clear all the values 
+ const clearValues  = ()=>{
         console.log("here")
         dispatch({
             type:CLEAR_VALUES
         })
 
-    }
+ }
 
-    // handle the change value
-    const handleChange = ({name, value})=>{
+ // handle the change value
+ const handleChange = ({name, value})=>{
         dispatch({type: HANDLE_CHANGE,
             payload:{name, value}
         })
-    }
+ }
 
-    // Created the JOB 
-    const createJob = async () =>{
+ // Created the JOB 
+ const createJob = async () =>{
     
         dispatch({type: CREATE_JOB_BEGIN});
         try {
@@ -182,11 +189,11 @@ authFetch.interceptors.response.use(
         }
         
         clearAlert(); 
-    }
+ }
 
 
     // get All jobs 
-    const getJobs = async () => {
+ const getJobs = async () => {
         dispatch({type: GET_JOBS_BEGIN});
         try {
             const response = await authFetch.get('/jobs') ;
@@ -209,17 +216,16 @@ authFetch.interceptors.response.use(
 
 
         clearAlert();
-    }
-    
-
-    // for log out user 
-    const logoutUser = () => {
+ }
+ 
+ // for log out user 
+ const logoutUser = () => {
         dispatch({ type: LOGOUT_USER })
         removesUserToLocalStorage();
-      }
-      
-    // for update user
-    const updateUser = async (currentUser) => {
+   }
+   
+ // for update user
+ const updateUser = async (currentUser) => {
         dispatch({type: UPDATE_USER_BEGIN});
 
         try {
@@ -249,10 +255,9 @@ authFetch.interceptors.response.use(
         }
         clearAlert();
        
-    }
-
-    // for login the user 
-    const loginUser = async (currentUser) =>{
+ } 
+ // for login the user 
+ const loginUser = async (currentUser) =>{
         dispatch({type: LOGIN_USER_BEGIN });
 
        try {
@@ -280,11 +285,11 @@ authFetch.interceptors.response.use(
        }
         
         clearAlert();
-    }
+ }
 
 
      // for registering the user 
-    const registerUser = async (currentUser) => {
+ const registerUser = async (currentUser) => {
          // dispatch Job_create action 
          dispatch({type: REGISTER_USER_BEGIN});
          
@@ -313,28 +318,77 @@ authFetch.interceptors.response.use(
              })
          }
          clearAlert(); 
+ } 
+ // pre-set edit job 
+ const setEditJob = (id) =>{
+      dispatch({type: SET_EDIT_JOB, payload: {id}})
+ } 
+ // set edit job
+ const editJob =  async () => {
+        dispatch({type: EDIT_JOB_BEGIN})
+        try {
+            const {position , company ,jobLocation, jobType,status } = state; 
+            await authFetch.patch(`/jobs/${state.editJobId}` ,{
+                position ,
+                company ,
+                jobLocation, 
+                jobType,
+                status, 
+            })
+
+           dispatch({type: EDIT_JOB_SUCCESS}) 
+           dispatch({type: CLEAR_VALUES})
+
+
+        } catch (error) {
+            if(error.response.status === 401){
+                return ;
+            }
+            dispatch({type: EDIT_JOB_ERROR,
+                payload: {
+                    msg: error.response.data.msg
+                }
+            })
+        }
+
+        clearAlert(); 
+ }
+ 
+ const deleteJob = async (jobId) =>{
+        dispatch({type: DELETE_JOB_BEGIN});
+        try {
+           
+            await authFetch.delete(`/jobs/${jobId}`);
+            getJobs();
+
+        } catch (error) {
+            logoutUser()
+        }
+            
+ }
+
+const showStats = async () => {
+    dispatch({type : SHOW_STATS_BEGIN})
+    try {
+        const {data} = await authFetch.get('/jobs/stats');
+        dispatch({type: SHOW_STATS_SUCCESS ,
+            payload: {
+                stats: data.defaultStats,
+                monthlyApplications: data.monthlyApplications
+            }
+        })
+
+    } catch (error) {
+        console.log(error.response); 
     }
 
-    // pre-set edit job 
-    const setEditJob = (id) =>{
-         dispatch({type: SET_EDIT_JOB, payload: {id}})
-    }
+    clearAlert();
 
-    // set edit job
-    const editJob =  () => {
-        console.log('editJob');
-    }
-    
+}
 
-    const deleteJob = (id) =>{
-        console.log(`delete id job ${id}`);
-    }
+ 
 
-    // deletejob 
 
-    // useEffect (()=>{
-    //     getJobs();
-    // },[])
 
 
     return (
@@ -345,7 +399,7 @@ authFetch.interceptors.response.use(
                                                       handleChange,  clearValues ,
                                                       createJob,     getJobs,
                                                       setEditJob ,   editJob ,
-                                                      deleteJob}}>
+                                                      deleteJob  ,   showStats}}>
                 {children}
                  </AppContext.Provider>
           )
@@ -359,3 +413,4 @@ export const useAppContext = () =>{
 }
 
 export {AppProvider}
+
