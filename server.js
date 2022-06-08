@@ -27,8 +27,10 @@ if(process.env.NODE_ENV !== 'production'){
     app.use(morgan('dev'));
 }
 
-app.use(express.json()); 
+app.use(express.json());
 
+
+// set up the port over here
 const port = process.env.PORT || 5001
 
 app.get('/', (req,res) => {
@@ -37,6 +39,8 @@ app.get('/', (req,res) => {
 })
 
  
+
+// set up the routes
 app.use('/api/v1/auth',authRouter); 
 app.use('/api/v1/jobs',authenticateUser,jobRouter); 
 
