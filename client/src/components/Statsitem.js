@@ -2,7 +2,6 @@ import React from 'react'
 import Wrapper from '../assets/wrappers/StatItem';
 const Statsitem = ({value}) => {
     const {count , title, icon ,color, bcg} = value;
-    console.log(count);
   return (
      <Wrapper color = {color} bcg = {bcg}>
         <header>

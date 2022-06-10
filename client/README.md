@@ -1,5 +1,16 @@
 # Jobify
 
+## MVC introduction 
+1. simply a design or architectural pattern used in softeware engineering. 
+2. model
+    - a model is a design or structure
+    - model determines how a database is structured, defining a section of application that interactes with the database 
+3. View
+    - where end users intereact within the application. 
+4. Controller 
+    - The controller interacts with the model and serves the response and functionality to the view. When an end user makes a request. The request will be sent to the controller which interacts with the database. 
+
+
 #### Track Your Job Search
 
 Project in Action - [Jobify](https://www.jobify.live/)

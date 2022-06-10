@@ -53,7 +53,7 @@ const login = async (req,res) => {
     // want to find the user by email and password 
     // extract the password. 
     const user = await User.findOne({email}).select('+password');
-    console.log(user); 
+    
     if(!user){
         throw new UnauthenticatedError('Invalid Credentials');
     }
