@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes"
 import {BadRequestError,NotFoundError, UnauthenticatedError} from "../errors/index.js";
 import checkPermissions from '../utils/checkPermissions.js'
 import mongoose from "mongoose";
-
+import moment from "moment";
 
 const createJob = async (req,res) => {
     const {company, position} = req.body;
@@ -15,6 +15,7 @@ const createJob = async (req,res) => {
     req.body.createdBy = req.user.userId; 
     const job = await Job.create(req.body);
     res.status(StatusCodes.OK).json({job});
+    
 
 }
 
@@ -79,7 +80,7 @@ const updateJob= async (req,res) => {
 const showStats = async(req,res) => {
     let stats = await Job.aggregate([
         {$match: {createdBy: mongoose.Types.ObjectId(req.user.userId)}},
-        {$group: {_id: '$status', count: {$sum: 1}}}
+        {$group: {_id: '$status', count: {$sum: 1}} }
 
     ]);
 
@@ -96,14 +97,37 @@ const showStats = async(req,res) => {
           declined:  stats.declined || 0 ,
       }
 
-    let monthlyApplications = []; 
+
+      // Aggregation based on month and year 
+    let monthlyApplications = await Job.aggregate(
+        [
+            {$match: {createdBy: mongoose.Types.ObjectId(req.user.userId)}},
+            {
+                $group : {
+                    _id: {year: {$year: '$createdAt'}, month: {$month: '$createdAt'}},
+                    count: {$sum: 1}
+                }
+            },
+            {$sort: {'_id.year':-1 , '_id.month':-1}},
+            {$limit: 6}
+        ]
+    ); 
+
+    // convert date and month to a clean format to be rendered on the front-end 
+    monthlyApplications =  monthlyApplications.map((item)=>{
+        const {_id, count} = item;
+        const {month,year} =_id;
+        const date = moment().month(month -1 ).year(year)
+        .format('MMM Y')
+        return {date, count}
+
+    })
+    
       //javascript reduce over here 
       // return the number of pending, interview .....
     res.status(StatusCodes.OK).json({defaultStats , monthlyApplications});
 
-    
 
-    
 }
 
 

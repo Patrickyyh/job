@@ -339,7 +339,6 @@ const clearAlert = () =>{
            dispatch({type: EDIT_JOB_SUCCESS}) 
            dispatch({type: CLEAR_VALUES})
 
-
         } catch (error) {
             if(error.response.status === 401){
                 return ;
