@@ -4,17 +4,24 @@ import Loading from './Loading'
 import Job from './Job'
 import Wrapper from '../assets/wrappers/JobsContainer'
 import { useAppContext } from '../context/appContext'
+import PageBtnContainer from './PageBtnContainer'
+
+
+
 
 const JobsContainer = () => {
+
+
  const {getJobs,jobs,page,totalJobs ,isLoading
-        ,search,searchStatus, searchType,sort 
+        ,search,searchStatus, searchType,sort ,
+        numbOfPages
  } = useAppContext();
  
    // fetch the jobs by calling the getjobs function 
    // re-render when some of the value change
     useEffect(()=>{
          getJobs();
-    },[search, searchStatus, searchType, sort])
+    },[page,search, searchStatus, searchType, sort])
 
  if(isLoading){
      // return the loading if it is loading currently. 
@@ -23,7 +30,6 @@ const JobsContainer = () => {
 
 
  if(jobs.length === 0){
-
      return (
         <Wrapper>
             <h2>No jobs to display</h2>
@@ -31,7 +37,7 @@ const JobsContainer = () => {
     )
 }
 
-  
+
   return (
     <Wrapper>
     <h5>
@@ -42,6 +48,8 @@ const JobsContainer = () => {
         return <Job key={job._id} value= {job} />
       })}
     </div>
+
+    {numbOfPages > 1 && <PageBtnContainer /> }
   </Wrapper>
   )
 }

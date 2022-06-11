@@ -26,6 +26,7 @@ import { CLEAR_ALERT, DISPLAY_ALERT,
         SHOW_STATS_BEGIN   ,
         SHOW_STATS_SUCCESS , 
         CLEAR_FILTERS, 
+        CHANGE_PAGE , 
     } from './actions';
 
 import { initialState } from './appContext';
@@ -36,6 +37,10 @@ const reducers = (state, action) => {
     // Toggle the sidebar 
     if(action.type === TOGGLE_SIDEBAR){
         return {...state , showSideBar: !state.showSideBar}
+    }
+
+    if(action.type === CHANGE_PAGE ){
+        return {...state, page: action.payload.page}
     }
     
 

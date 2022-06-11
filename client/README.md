@@ -5332,6 +5332,12 @@ export default PageButtonContainer
 #### Button Container
 
 - [Array.from] (https://youtu.be/zg1Bv4xubwo)
+The Array.from() static method creates a new, shallow-copied Array instance from an array-like or iterable object.
+
+
+
+
+
 
 ```js
 PageBtnContainer.js
