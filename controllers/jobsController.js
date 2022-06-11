@@ -41,6 +41,7 @@ const deleteJob= async (req,res) => {
 const getAllJobs = async (req,res) => {
 
      // set up the parameter we will set up in the front-end 
+     // make use of the query over here
      const {status,jobType, sort, search} = req.query;
 
      const queryObject = {
@@ -84,14 +85,33 @@ const getAllJobs = async (req,res) => {
         result = result.sort('-position');
     }
 
+    // // how many job we want back
+    // const limit = 10;
+    // // which job we want to skip 
+    // const skip = 1 ;
+    // result = result.skip(skip).limit(limit);
+
+    // set up the page, limit and skip. 
+
+    const page  = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip  = (page - 1) * limit;
+    result = result.skip(skip).limit(limit);
+    
+
     // collect all the process over here. 
     const jobs = await result;
 
+    // calculate how many pages needed for the number of the search item 
+    const totalJobs = await Job.countDocuments(queryObject);
+    const numbOfPages = Math.ceil(totalJobs / limit); 
+    console.log(numbOfPages); 
+
 
     // const jobs = await Job.find(queryObject)
-    res.status(StatusCodes.OK).json({jobs,totalJobs: jobs.length, numOfPages: 1});
+    res.status(StatusCodes.OK).json({jobs, totalJobs, numbOfPages});
    
-
+ 
 }
 
 // working on the update job

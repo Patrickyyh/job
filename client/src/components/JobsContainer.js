@@ -6,12 +6,15 @@ import Wrapper from '../assets/wrappers/JobsContainer'
 import { useAppContext } from '../context/appContext'
 
 const JobsContainer = () => {
- const {getJobs,jobs,page,totalJobs ,isLoading} = useAppContext();
+ const {getJobs,jobs,page,totalJobs ,isLoading
+        ,search,searchStatus, searchType,sort 
+ } = useAppContext();
  
    // fetch the jobs by calling the getjobs function 
+   // re-render when some of the value change
     useEffect(()=>{
          getJobs();
-    },[])
+    },[search, searchStatus, searchType, sort])
 
  if(isLoading){
      // return the loading if it is loading currently. 

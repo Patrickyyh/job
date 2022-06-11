@@ -29,6 +29,7 @@ import {
     EDIT_JOB_ERROR  ,
     SHOW_STATS_BEGIN   ,
     SHOW_STATS_SUCCESS ,
+    CLEAR_FILTERS,
 } from './actions';
 
 import reducers from './reducers';
@@ -160,7 +161,7 @@ const clearAlert = () =>{
 
 
  const clearFilter = () => {
-    console.log('clear filters');
+    dispatch({type: CLEAR_FILTERS}); 
  }
 
  // handle the change value
@@ -203,17 +204,31 @@ const clearAlert = () =>{
 
     // get All jobs 
  const getJobs = async () => {
+
+        // will add page later
+
+        // have to refactor the request 
+        const {search  , searchStatus ,searchType , sort} = state; 
+        let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+        if(search){
+            ;
+            url = url + `&search=${search}`;
+        }
+
         dispatch({type: GET_JOBS_BEGIN});
         try {
-            const response = await authFetch.get('/jobs') ;
-            const {jobs, totalJobs,numOfPages} = response.data; 
+
+
+            const response = await authFetch.get(url) ;
+            const {jobs, totalJobs,numbOfPages} = response.data; 
             
+            // dispatch the actions
             dispatch({
                 type: GET_JOBS_SUCCESS,
                 payload: {
                     jobs,
                     totalJobs,
-                    numOfPages,
+                    numbOfPages,
                 }
             })
 

@@ -28,6 +28,8 @@ const SearchContainer = () => {
       if(isLoading){return}
       const name = e.target.name;
       const value = e.target.value;
+
+    // responsible for dispatch the value change action
       handleChange({name,value}); 
   }
 
@@ -56,7 +58,7 @@ const SearchContainer = () => {
               {/* search by status */}
               <FormRowSelect
                 labelText= 'job status'
-                name ='status'
+                name ='searchStatus'
                 value = {searchStatus}
                 handleChange = {handleSearch}
                 arrayDisplay = {CompleteStatusOptions}
@@ -76,7 +78,7 @@ const SearchContainer = () => {
                 labelText= 'sort'
                 name ='sort'
                 value = {sort}
-                handleChange = {handleChange}
+                handleChange = {handleSearch}
                 arrayDisplay = {sortOptions}
               />
                 

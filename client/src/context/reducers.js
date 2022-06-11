@@ -25,6 +25,7 @@ import { CLEAR_ALERT, DISPLAY_ALERT,
         EDIT_JOB_ERROR, 
         SHOW_STATS_BEGIN   ,
         SHOW_STATS_SUCCESS , 
+        CLEAR_FILTERS, 
     } from './actions';
 
 import { initialState } from './appContext';
@@ -60,6 +61,16 @@ const reducers = (state, action) => {
     }    
 
 
+    if(action.type === CLEAR_FILTERS){
+        return {...state,
+            search: '',
+            searchStatus: 'all',
+            searchType: 'all',
+            sort : 'latest',
+        }
+    }
+
+
     if(action.type === SHOW_STATS_BEGIN){
         return {...state, isLoading: true , showAlert: false}
 
@@ -79,7 +90,7 @@ const reducers = (state, action) => {
         return {...state , isLoading: true}; 
     }
 
-
+    
 
     if(action.type === EDIT_JOB_SUCCESS){
         return {...state , 
@@ -133,7 +144,7 @@ const reducers = (state, action) => {
                 isLoading: false, 
                 jobs:      action.payload.jobs, 
                 totalJobs: action.payload.totalJobs,
-                numOfPage: action.payload.numOfPage
+                numbOfPages: action.payload.numbOfPages
             }
     }
 
