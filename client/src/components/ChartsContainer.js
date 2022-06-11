@@ -1,6 +1,6 @@
 import React ,{useState} from 'react'
-import BarChart from './BarChart'
-import AreaChart from './AreaChart'
+import BarChartComponent from './BarChart'
+import AreaChartComponent from './AreaChart'
 import { useAppContext } from '../context/appContext'
 import Wrapper from '../assets/wrappers/ChartsContainer'
 
@@ -18,8 +18,8 @@ const ChartsContainer = () => {
             {barChart ? 'AreaChart' : 'barChart'}
         </button>
         
-        {barChart ? <BarChart value = {monthlyApplications}/> : 
-                    <AreaChart  value ={monthlyApplications}/> }
+        {barChart ? <BarChartComponent value = {monthlyApplications}/> : 
+                    <AreaChartComponent  value ={monthlyApplications}/> }
    </Wrapper>
     )
 }

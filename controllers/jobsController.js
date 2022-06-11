@@ -34,11 +34,61 @@ const deleteJob= async (req,res) => {
     await job.remove();
     res.status(StatusCodes.OK).json({msg: 'Success! Job removed'});
 
-
 }
+
+
+
 const getAllJobs = async (req,res) => {
 
-    const jobs = await Job.find({createdBy: req.user.userId});
+     // set up the parameter we will set up in the front-end 
+     const {status,jobType, sort, search} = req.query;
+
+     const queryObject = {
+        createdBy: req.user.userId
+     }
+    
+    // const jobs = await Job.find({createdBy: req.user.userId, status});
+
+     // add stuff based condition 
+     if ( status && status !== 'all'){
+         queryObject.status = status; 
+     }
+
+     if (jobType && jobType !== 'all'){
+         queryObject.jobType = jobType;
+     }
+
+     if(search){
+         // case insentive over here 
+         // genric match the search parameter will be fine. 
+        queryObject.position = {$regex: search , $options : 'i'}
+     }
+
+
+    // No await 
+    let result = Job.find(queryObject);
+
+
+    // // chain sort condition 
+    // sort by latest, oldest, A-Z AND Z-A 
+    if(sort === 'latest'){
+        result = result.sort('-createdAt');
+    }
+    if(sort === 'oldest'){
+        result = result.sort('createdAt');
+    }
+    if(sort === 'a-z'){
+        result = result.sort('position')
+    }
+    if (sort === 'z-a'){
+        result = result.sort('-position');
+    }
+
+    // collect all the process over here. 
+    const jobs = await result;
+
+
+    // const jobs = await Job.find(queryObject)
     res.status(StatusCodes.OK).json({jobs,totalJobs: jobs.length, numOfPages: 1});
    
 

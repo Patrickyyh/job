@@ -64,7 +64,11 @@ export const initialState = {
   page: 1,
   stats: {},
   monthlyApplications: [], 
-  
+  search: '',
+  searchStatus: 'all',
+  searchType: 'all',
+  sort : 'latest',
+  sortOptions: ['latest', 'oldest','a-z','z-a'],
 }
 
 const AppContext = React.createContext();
@@ -83,7 +87,7 @@ const AppProvider = ({children})=>{
     })
 
 
-  // interceptors for the request 
+  // interceptors for the request  =>> checkout axios documentation. 
   authFetch.interceptors.request.use(
     (config) => {
       config.headers.common['Authorization'] = `Bearer ${state.token}`
@@ -152,6 +156,11 @@ const clearAlert = () =>{
             type:CLEAR_VALUES
         })
 
+ }
+
+
+ const clearFilter = () => {
+    console.log('clear filters');
  }
 
  // handle the change value
@@ -385,11 +394,6 @@ const showStats = async () => {
 
 }
 
- 
-
-
-
-
     return (
                 
                 <AppContext.Provider value={{...state,displayAlert,  registerUser,
@@ -398,7 +402,8 @@ const showStats = async () => {
                                                       handleChange,  clearValues ,
                                                       createJob,     getJobs,
                                                       setEditJob ,   editJob ,
-                                                      deleteJob  ,   showStats}}>
+                                                      deleteJob  ,   showStats,
+                                                      clearFilter              }}>
                 {children}
                  </AppContext.Provider>
           )

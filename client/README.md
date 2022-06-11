@@ -11,6 +11,7 @@
     - The controller interacts with the model and serves the response and functionality to the view. When an end user makes a request. The request will be sent to the controller which interacts with the database. 
 
 
+
 #### Track Your Job Search
 
 Project in Action - [Jobify](https://www.jobify.live/)
@@ -4720,6 +4721,11 @@ const AreaChartComponent = ({ data }) => {
 ```
 
 #### Filter
+- To set up the search job functionality. 
+- If the status is all, we neglect the query parameter 
+- otherwise --->  
+
+query Params -> Status 
 
 #### Get All Jobs - Initial Setup
 
@@ -4745,6 +4751,7 @@ const getAllJobs = async (req, res) => {
     .json({ jobs, totalJobs: jobs.length, numOfPages: 1 })
 }
 ```
+
 
 #### Status
 
@@ -4807,6 +4814,13 @@ const getAllJobs = async (req, res) => {
 ```
 
 #### Search
+- Target: everytime we type a single word on the search bar.The front end will send a request to the back end.
+- Let's see how could we achieve this. 
+
+We want the user fill the search bar only based on the position.
+So the search bar is different from the jobtype and status. 
+
+
 
 ```js
 jobsController.js
@@ -4825,11 +4839,12 @@ const getAllJobs = async (req, res) => {
     queryObject.jobType = jobType
   }
   if (search) {
+    // "i" over here indicates the case insensitive match 
     queryObject.position = { $regex: search, $options: 'i' }
   }
   // NO AWAIT
   let result = Job.find(queryObject)
-
+  
   // chain sort conditions
   if (sort === 'latest') {
     result = result.sort('-createdAt')
