@@ -5484,6 +5484,10 @@ package.json
 
 ```
 
+- For deployment
+- For every route the route goes to our server, we want to pointed it to the index.html
+- The reason why we want to put it after the other routes
+- we only would like to make the get redirector over here 
 ```js
 server.js
 

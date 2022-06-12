@@ -8,7 +8,7 @@ import PageBtnContainer from './PageBtnContainer'
 
 
 
-
+// JobsContainer
 const JobsContainer = () => {
 
 
@@ -21,6 +21,7 @@ const JobsContainer = () => {
    // re-render when some of the value change
     useEffect(()=>{
          getJobs();
+         //eslint-disable-next-line
     },[page,search, searchStatus, searchType, sort])
 
  if(isLoading){

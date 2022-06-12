@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+//eslint-disable-next-line
 import React, { useState, useReducer, useContext,useEffect } from 'react'
 import { 
     DISPLAY_ALERT,
@@ -233,7 +234,7 @@ const clearAlert = () =>{
             })
 
         } catch (error) {
-            console.log(error.response);
+            logoutUser();
             // adding this logic later logoutUser()
            // For development convinent. 
         }
@@ -402,7 +403,7 @@ const showStats = async () => {
         })
 
     } catch (error) {
-        console.log(error.response); 
+        logoutUser();  
     }
 
     clearAlert();
